@@ -9,7 +9,7 @@
     <version>1.0.1</version>
     <dependencies>
         <dependency>
-            <groupId>net.luminis</groupId>
+            <groupId>com.gluonhq.net.luminis</groupId>
             <artifactId>agent15</artifactId>
             <version>1.0.0</version>
         </dependency>
