@@ -6,7 +6,7 @@
 
     <groupId>com.gluonhq.net.luminis</groupId>
     <artifactId>kwik</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>com.gluonhq.net.luminis</groupId>
