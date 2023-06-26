@@ -115,6 +115,7 @@ public abstract class QuicConnectionImpl implements QuicConnection, PacketProces
     private RateLimiter closeFramesSendRateLimiter;
     private final ScheduledExecutorService scheduler;
 
+    private long lastPacketReceived = 0;
 
     protected QuicConnectionImpl(Version originalVersion, Role role, Path secretsFile, Logger log) {
         this.quicVersion = new VersionHolder(originalVersion);
@@ -187,6 +188,15 @@ public abstract class QuicConnectionImpl implements QuicConnection, PacketProces
         return getStreamManager().createStream(bidirectional);
     }
 
+    /**
+     * Return the time in milliseconds when the last packet for this connection
+     * has been received
+     * @return the time (ms)
+     */
+    public long getLastPacketReceived() {
+        return this.lastPacketReceived;
+    }
+
     public void parseAndProcessPackets(int datagram, Instant timeReceived, ByteBuffer data, QuicPacket parsedPacket) {
         while (data.remaining() > 0 || parsedPacket != null) {
             try {
@@ -203,6 +213,7 @@ public abstract class QuicConnectionImpl implements QuicConnection, PacketProces
 
                 processPacket(timeReceived, packet);
                 getSender().packetProcessed(data.hasRemaining());
+                lastPacketReceived = System.currentTimeMillis();
             }
             catch (DecryptionException | MissingKeysException cannotParse) {
                 // https://tools.ietf.org/html/draft-ietf-quic-transport-24#section-12.2
